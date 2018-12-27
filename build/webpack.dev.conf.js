@@ -10,6 +10,15 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const portfinder = require('portfinder')
 
+// 首先
+const express = require('express');
+const app = express();
+const router = express.Router();
+const goodsData = require('./../mock/goods.json');
+router.get("/goods", function (req, res, next) => {
+
+});
+
 const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
 

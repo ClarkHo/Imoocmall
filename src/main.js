@@ -3,10 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import {router} from './router'
-import * as util from './util'
 
-console.log(`sum:${util.sum(1,6)}`)
-console.log(`minus:${util.minus(10,2)}`)
 
 Vue.config.productionTip = false
 
