@@ -37,9 +37,9 @@
             <div class="accessory-list-wrap">
               <div class="accessory-list col-4">
                 <ul>
-                  <li>
+                  <li v-for="(item,index) in goodsList">
                     <div class="pic">
-                      <a href="#"><img src="/static/1.jpg" alt=""></a>
+                      <a href="#"><img :src="'/static/' + item.productImg" alt=""></a>
                     </div>
                     <div class="main">
                       <div class="name">XX</div>
@@ -100,16 +100,29 @@
     import NavHeader from '@/components/NavHeader.vue'
     import NavFooter from '@/components/NavFooter.vue'
     import NavBread from '@/components/NavBread.vue'
+    import axios from 'axios'
     export default{
         data(){
             return {
-
+              goodsList:[]
             }
         },
         components:{
           NavHeader,
           NavFooter,
           NavBread
+        },
+        mounted () {
+          this.getGoodsList();
+        },
+        methods:{
+          getGoodsList() {
+            axios.get("/api/appData").then((result) => {
+              console.log(result,7777777777777)
+              const res = result.data;
+              this.goodsList=res.data.result;
+            })
+          }
         }
     }
 </script>
