@@ -42,8 +42,14 @@ router.get("/", function (req, res, next) {
   	}
   }
 
+  // skip表示跳过几条数据 ，limit表示一页多少条数据
 	let goodsModel = Goods.find(params).skip(skip).limit(pageSize);
+	// 声明对哪个字段进行排序 ，这里如salePrice金额 sort 1 为升序,-1 为降序
 	goodsModel.sort({'salePrice':sort});
+	// 第一个是参数，目前没有入参
+  // 返回的是两个参数，第一个是报错err,第二个是文档
+  // 因为这里不是普通的查询，经过到这里已经执行了很多步骤了 下面通过exec来执行我们的方法
+  // exec这里不需要传入参数了，因为前面已经find 拿到结果了
 	goodsModel.exec( function (err,doc) {
 		if(err) {
 			res.json({
@@ -51,6 +57,7 @@ router.get("/", function (req, res, next) {
 				msg:err.message
 			});
 		}else {
+			// 如果没有报错就把结果输出
 			res.json({
 				status: '0',
 				msg:'',
