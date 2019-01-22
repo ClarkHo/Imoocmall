@@ -36,13 +36,13 @@
                       <div class="name">{{item.productName}}</div>
                       <div class="price">{{item.salePrice}}</div>
                       <div class="btn-area">
-                        <a href="javascript:;" class="btn btn--m">加入购物车</a>
+                        <a href="javascript:;" class="btn btn--m" @click="addCart(item.productId)">加入购物车</a>
                       </div>
                     </div>
                    </li> 
                 </ul>
                 <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="20">
-                  加载中...
+                  <img src="./../assets/loading-spinning-bubbles.svg" v-show="loading">
                 </div>
               </div>
             </div>
@@ -64,20 +64,24 @@
         data(){
             return {
               goodsList:[],
-              priceFilter: [
-                {
-                  startPrice: '0.00',
-                  endPrice: '500.00'
-                },
-                {
-                  startPrice: '500.00',
-                  endPrice: '1000.00'
-                },
-                {
-                  startPrice: '1000.00',
-                  endPrice: '2000.00'
-                }
-              ],
+              priceFilter:[
+                  {
+                      startPrice:'0.00',
+                      endPrice:'100.00'
+                  },
+                  {
+                    startPrice:'100.00',
+                    endPrice:'500.00'
+                  },
+                  {
+                    startPrice:'500.00',
+                    endPrice:'1000.00'
+                  },
+                  {
+                    startPrice:'1000.00',
+                    endPrice:'5000.00'
+                  }
+                ],
               priceChecked: 'all',
               filterBy:false,
               overLayFlag:false,
@@ -85,6 +89,7 @@
               page:1,
               pageSize:8,
               busy: true,
+              loading: false,
             }
         },
         components:{
@@ -103,10 +108,12 @@
               sort:this.sortFlag?1:-1,
               priceLevel:this.priceChecked
             }
+            this.loading = true;
             axios.get("/goods",{
               params:param
             }).then((result) => {
               const res = result.data;
+              this.loading = true;
               if (res.status === "0") {
                 if(flag) {
                   this.goodsList = this.goodsList.concat(res.result.list);
@@ -149,6 +156,18 @@
               this.page++;
               this.getGoodsList(true);
             }, 500);
+          },
+          addCart(productId) {
+            axios.post("/goods/addCart", {
+              productId: productId
+            }).then((res) => {
+              console.log(typeof(res.data.status),'res')
+              if (res.data.status === '0') {
+                alert("add to cart succesfully");
+              } else {
+                alert ("msg:" + res.msg);
+              }
+            })
           }
         }
     }
