@@ -73,7 +73,8 @@ router.get("/", function (req, res, next) {
 //加入到购物车
 router.post("/addCart", function (req,res,next) {
   var userId = '100000077',productId = req.body.productId;
-  var User = require('../models/user');
+  var User = require('../models/user'); // 获取用户模型
+   // 查询第一条:拿到用户信息
   User.findOne({userId:userId}, function (err,userDoc) {
     if(err){
         res.json({
@@ -84,13 +85,14 @@ router.post("/addCart", function (req,res,next) {
         console.log("userDoc:"+userDoc);
         if(userDoc){
           var goodsItem = '';
+          // 遍历购物车列表查询有没有此产品
           userDoc.cartList.forEach(function (item) {
-              if(item.productId == productId){
+              if(item.productId == productId){ // 如果购物车列表已经有了该商品，只将此商品数量加1
                 goodsItem = item;
                 item.productNum ++;
               }
           });
-          if(goodsItem){
+          if(goodsItem){ // 如果此商品购物车里面已经有了，那么就更新一下productNum
             userDoc.save(function (err2,doc2) {
               if(err2){
                 res.json({
@@ -117,7 +119,8 @@ router.post("/addCart", function (req,res,next) {
                   doc.productNum = 1;
                   doc.checked = 1;
                   userDoc.cartList.push(doc);
-                  userDoc.save(function (err2,doc2) {
+                  userDoc.save(function (err2,doc2) { // 将数据添加
+
                     if(err2){
                       res.json({
                         status:"1",
