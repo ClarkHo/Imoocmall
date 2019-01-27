@@ -31,3 +31,33 @@
     </div>
   </header>
 </template>  
+<script>
+  import './../assets/css/login.css'
+  import axios from 'axios'
+  export default {
+    data () {
+      return {
+        userName: '',
+        userPwd: '',
+        errorTip: false,
+      }
+    },
+    methods: {
+      login() {
+        axios.post("/users/login", {
+          userNmae: this.userName,
+          userPwd: this.userPwd,
+        }).then((response)  => {
+          let res = response.data;
+          if(res.status == "0") {
+            this.errorTip = false;
+            // todo
+          } else {
+            this.errorTip = true;
+          }
+        })
+
+      }
+    }
+  }
+</script>

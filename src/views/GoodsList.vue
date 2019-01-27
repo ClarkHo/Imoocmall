@@ -113,7 +113,7 @@
               params:param
             }).then((result) => {
               const res = result.data;
-              this.loading = true;
+              this.loading = false;
               if (res.status === "0") {
                 if(flag) {
                   this.goodsList = this.goodsList.concat(res.result.list);
