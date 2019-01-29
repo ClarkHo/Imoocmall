@@ -109,7 +109,7 @@
               priceLevel:this.priceChecked
             }
             this.loading = true;
-            axios.get("/goods",{
+            axios.get("/goods/list",{
               params:param
             }).then((result) => {
               const res = result.data;
@@ -161,11 +161,11 @@
             axios.post("/goods/addCart", {
               productId: productId
             }).then((res) => {
-              console.log(typeof(res.data.status),'res')
+              console.log(res.data,'res')
               if (res.data.status === '0') {
                 alert("add to cart succesfully");
               } else {
-                alert ("msg:" + res.msg);
+                alert ("msg:" + res.data.msg);
               }
             })
           }
