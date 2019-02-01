@@ -74,46 +74,83 @@
     </header>
 </template> 
 <script>
-  import './../assets/css/login.css'
-  import axios from 'axios'
-  import {mapState} from 'vuex'
-  export default {
-    data () {
-      return {
-        userName: 'admin',
-        userPwd: '123456',
-        errorTip: false,
-      }
-    },
-    computed:{
-      ...mapState(['nickName','cartCount'])
-    },
-    methods: {
-      login() {
-        axios.post("/users/login", {
-          userNmae: this.userName,
-          userPwd: this.userPwd,
-        }).then((response)  => {
-          let res = response.data;
-          if(res.status == "0") {
-            this.errorTip = false;
-            // todo
-          } else {
-            this.errorTip = true;
-          }
-        })
-      },
-      logOut() {
-        axios.post("/users/logout").then((response) => {
-          let res = response.data;
-          if(res.status =="0") {
-            this.nickName = '';
-          }
-
-        })
-      }
+    import './../assets/css/login.css'
+    import axios from 'axios'
+    import { mapState } from 'vuex'
+    export default{
+        data(){
+            return{
+              userName:'admin',
+              userPwd:'123456',
+              errorTip:false,
+              loginModalFlag:false
+            }
+        },
+        computed:{
+          ...mapState(['nickName','cartCount'])
+        },
+        /*nickName(){
+          return this.$store.state.nickName;
+        },
+        cartCount(){
+          return this.$store.state.cartCount;
+        }*/
+        mounted(){
+            this.checkLogin();
+        },
+        methods:{
+            checkLogin(){
+                axios.get("/users/checkLogin").then((response)=>{
+                    var res = response.data;
+                    var path = this.$route.pathname;
+                    if(res.status=="0"){
+                    //this.nickName = res.result;
+                      this.$store.commit("updateUserInfo",res.result);
+                      this.loginModalFlag = false;
+                    }else{
+                      if(this.$route.path!="/goods"){
+                        this.$router.push("/goods");
+                      }
+                    }
+                });
+            },
+            login(){
+                if(!this.userName || !this.userPwd){
+                  this.errorTip = true;
+                  return;
+                }
+                axios.post("/users/login",{
+                  userName:this.userName,
+                  userPwd:this.userPwd
+                }).then((response)=>{
+                    let res = response.data;
+                    if(res.status=="0"){
+                      this.errorTip = false;
+                      this.loginModalFlag = false;
+                      this.$store.commit("updateUserInfo",res.result.userName);
+                      this.getCartCount();
+                    }else{
+                      this.errorTip = true;
+                    }
+                });
+            },
+            logOut(){
+                axios.post("/users/logout").then((response)=>{
+                    let res = response.data;
+                    if(res.status=="0"){
+                      //  this.nickName = '';
+                        this.$store.commit("updateUserInfo",res.result.userName);
+                    }
+                })
+            },
+            // getCartCount(){
+            //   axios.get("users/getCartCount").then(res=>{
+            //     var res = res.data;
+            //     this.$store.commit("updateCartCount",res.result);
+            //   });
+            // }
+        }
     }
-  }
 </script>
 <style>
   .header {
