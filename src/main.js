@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import {router} from './router'
+import Vuex from 'vuex'
 import VueLazyLoad from 'vue-lazyload'
 import infiniteScroll from 'vue-infinite-scroll'
 
@@ -11,6 +12,24 @@ Vue.use(VueLazyLoad,{
 });
 
 Vue.use(infiniteScroll)
+Vue.use(Vuex);
+
+const store = new Vuex.Store({
+	state: {
+		nickName:'',
+		cartCount:0
+	},
+	mutations:{
+		// update user info
+		updateUserInfo(state,nickName){
+			state.nickName = nickName;
+		},
+		updateCartCount(state,cartCount){
+			state.cartCount += cartCount;
+		}
+	}
+});
+
 
 Vue.config.productionTip = false
 
