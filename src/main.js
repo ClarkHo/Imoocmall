@@ -6,6 +6,7 @@ import {router} from './router'
 import Vuex from 'vuex'
 import VueLazyLoad from 'vue-lazyload'
 import infiniteScroll from 'vue-infinite-scroll'
+import {currency} from './util/currency'
 
 Vue.use(VueLazyLoad,{
 	loading:"/static/loading-svg/loading-bars.svg"
@@ -32,6 +33,8 @@ const store = new Vuex.Store({
 
 
 Vue.config.productionTip = false
+
+Vue.filter("currency", currency);
 
 /* eslint-disable no-new */
 new Vue({

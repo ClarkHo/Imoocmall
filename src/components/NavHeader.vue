@@ -128,7 +128,7 @@
                       this.errorTip = false;
                       this.loginModalFlag = false;
                       this.$store.commit("updateUserInfo",res.result.userName);
-                      this.getCartCount();
+                      // this.getCartCount();
                     }else{
                       this.errorTip = true;
                     }
