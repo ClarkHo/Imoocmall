@@ -12,8 +12,9 @@ export let router = new Router({
   routes: [
     {
       path: '/',
-      name: 'GoodsList',
-      component:GoodsList
+      redirect: {
+        name: 'GoodsList', 
+      }
     },
     {
       path: '/goods',
